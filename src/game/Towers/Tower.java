@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
-import game.MoveStrategies.*;
-import game.AttackStrategies.*;
 import game.DetectStrategies.*;
 import game.Enemies.Enemy;
 import game.Projectiles.Projectile;
@@ -17,59 +15,64 @@ import game.IScreenData;
 
 public abstract class Tower {	
 	
+	// Default values for a Tower.
 	public static final int DEFAULT_WIDTH = IScreenData.tileWidth;
 	public static final int DEFAULT_HEIGHT = IScreenData.tileHeight;
-	public static final int DEFAULT_XCOOR = IScreenData.screenWidth / 2;
-	public static final int DEFAULT_YCOOR = IScreenData.screenHeight / 2;
-	public static final int DEFAULT_ATTACKSPEED = 1000;
-	public static final int DEFAULT_ATTACKRADIUS = (DEFAULT_WIDTH + DEFAULT_WIDTH) * 3;
 	
-	private int xCoor, yCoor, width, height;
+	// Used for displaying graphics.
+	private int xCoor, yCoor;
+	private int width, height;
 	private Color color;
+		
+	// Used to determine how to detect an enemy.
+	private IDetectStrategy detectStrategy;
 	
+	// Used for attacking enemies.
 	private int attackSpeed; 
     private int attackRadius;
-	private boolean canShoot = false;
-	
+	private boolean canShoot;
 	private Timer attackEnemyTimer; 
-	
-	private IDetectStrategy detectStrategy;
-	private IAttackStrategy attackStrategy;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
 
-	public Tower() {}
-	
-	public void update() {
-		Enemy enemy = detect();
-		if (enemy != null)
-			attack(enemy);
+	// Super class constructor only needs to be passed values for xCoor and yCoor.
+	public Tower(int xCoor, int yCoor) {
+		setXCoor(xCoor);
+		setYCoor(yCoor);
+		
+		setColor(Color.BLUE);
+		
+		setAttackSpeed(500);
+		setAttackRadius((DEFAULT_WIDTH + DEFAULT_HEIGHT)*5);
+		setCanShoot(false);
+		setAttackEnemyTimer();
 	}
 	
+	// Used to update current state of tower.
+	public void update() {
+		attack();
+	}
+	
+	// Used to call the detect strategy's implementation.
 	public Enemy detect() { 
 		return getDetectStrategy().detect(this); }
 	
-	public void attack(Enemy enemy) { 
-		getAttackStrategy().attack(this, enemy); }
+	// Used to attack enemies.
+	public void attack() {
+		Enemy enemy = detect();
+		if (enemy != null) {
+			if (getCanShoot()) {
+				createProjectile(enemy);
+				setCanShoot(false);
+			}
+		}
+	}
 	
+	// Used to create a projectile.
 	public void createProjectile(Enemy enemy) {
 		getProjectiles().add(ProjectileFactory.create(this, enemy));
 	}
-	public void removeProjectile(int index) {
-		getProjectiles().remove(index);
-	}
-	
-	public Tower XCoor(int xCoor) { this.xCoor = xCoor; return this; }
-	public Tower YCoor(int yCoor) { this.yCoor = yCoor; return this; }
-	public Tower Width(int width) { this.width = width; return this; }
-	public Tower Height(int height) { this.height = height; return this; }
-	public Tower Color(Color color) { this.color = color; return this; }
-	public Tower AttackSpeed(int attackSpeed) { this.attackSpeed = attackSpeed; return this; }
-	public Tower AttackRadius(int attackRadius) { this.attackRadius = attackRadius; return this; }
-	public Tower AttackEnemyTimer() { this.attackEnemyTimer = new Timer(this.attackSpeed, new AttackEvent()); this.attackEnemyTimer.start(); return this; }
-	public Tower CanShoot(boolean canShoot) { this.canShoot = canShoot; return this; }
-	public Tower DetectStrategy(IDetectStrategy detectStrategy) { this.detectStrategy = detectStrategy; return this; }
-	public Tower AttackStrategy(IAttackStrategy attackStrategy) { this.attackStrategy = attackStrategy; return this; }
-	
+		
+	// Setter methods for superclass variables.
 	public void setXCoor(int xCoor) { this.xCoor = xCoor; }
 	public void setYCoor(int yCoor) { this.yCoor = yCoor; }
 	public void setWidth(int width) { this.width = width; }
@@ -80,8 +83,8 @@ public abstract class Tower {
 	public void setAttackEnemyTimer() { this.attackEnemyTimer = new Timer(this.attackSpeed, new AttackEvent()); this.attackEnemyTimer.start(); }
 	public void setCanShoot(boolean canShoot) { this.canShoot = canShoot; }
 	public void setDetectStrategy(IDetectStrategy detectStrategy) { this.detectStrategy = detectStrategy; }
-	public void setAttackStrategy(IAttackStrategy attackStrategy) { this.attackStrategy = attackStrategy; }
 	
+	// Getter methods for superclass variables.
 	public int getXCoor() { return this.xCoor; }
 	public int getYCoor() { return this.yCoor; }
 	public int getWidth() { return this.width; }
@@ -92,7 +95,6 @@ public abstract class Tower {
 	public Timer getAttackEnemyTimer() { return this.attackEnemyTimer; }
 	public boolean getCanShoot() { return this.canShoot; }
 	public IDetectStrategy getDetectStrategy() { return this.detectStrategy; }
-	public IAttackStrategy getAttackStrategy() { return this.attackStrategy; }
 	public ArrayList<Projectile> getProjectiles() { return this.projectiles; }
 	
 	//-------------------------------------------------
@@ -100,7 +102,7 @@ public abstract class Tower {
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			canShoot = true;
+			setCanShoot(true);
 		}
 	}
 	//-------------------------------------------------

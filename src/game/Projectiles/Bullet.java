@@ -1,10 +1,11 @@
 package game.Projectiles;
 
-import game.DamageStrategies.IDamageStrategy;
 import game.Enemies.Enemy;
-import game.MoveStrategies.IEnemyMoveStrategy;
+import game.Towers.Tower;
 
 public class Bullet extends Projectile {
 
-	public Bullet() { super(); }
+	public Bullet(Tower tower, Enemy enemy) { 
+		super(tower, enemy); 
+	}
 }

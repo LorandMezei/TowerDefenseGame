@@ -13,25 +13,37 @@ public class BresenhamProjectile_Move_Strategy implements IProjectileMoveStrateg
 	private boolean setTracking = false;
 	private int currentFrame = 0;
 	
-	
 	@Override
 	public void move(Projectile projectile, Enemy enemy) {
 		
 		if (setTracking == false) {
-			bresenham(projectile.getXCoor(), projectile.getYCoor(),
-					   enemy.getXCoor(), enemy.getYCoor());
+			// Get the x value to move to.
+			int moveToX = enemy.getXCoor() + ( (projectile.getXCoor() + projectile.getMaxDisplacement()) + 
+											   (enemy.getXCoor() - projectile.getXCoor()) 
+											 );
+			// Using linear extrapolation formula to get the y value to move to.
+			int moveToY = projectile.getYCoor() + (((moveToX - projectile.getXCoor())/(enemy.getXCoor() - projectile.getXCoor()))*((enemy.getYCoor() - projectile.getYCoor())));
+			
+			// Create the x and y path for the projectile to move along.
+			bresenham(projectile.getXCoor(), projectile.getYCoor(), moveToX, moveToY);
+			setTracking = true;
+			
+			System.out.println(moveToX + "," + moveToY);
 		}
 		
-		projectile.setXCoor(xPath.get(currentFrame));
-		projectile.setYCoor(yPath.get(currentFrame));
+		if (currentFrame < xPath.size()) {
+			 // Move projectile based on frame since projectile was created.
+			projectile.setXCoor(xPath.get(currentFrame));
+			projectile.setYCoor(yPath.get(currentFrame));
+			
+			currentFrame++;
+		}		
 	}
 	
 	// function for line generation 
     public void bresenham(int x1, int y1, int x2, int y2) 
     { 
-    	ArrayList<Integer> xPath = new ArrayList<>();
-    	ArrayList<Integer> yPath = new ArrayList<>();
-    
+    	
         int m_new = 2 * (y2 - y1); 
         int slope_error_new = m_new - (x2 - x1); 
       

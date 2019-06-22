@@ -1,18 +1,16 @@
 package game.Enemies;
 
 import game.IScreenData;
-import game.AttackStrategies.IAttackStrategy;
+import game.CollisionMediators.EnemyRoad_Collision_Mediator;
 import game.CollisionMediators.IEnemyCollisionMediator;
-import game.DetectStrategies.IDetectStrategy;
+import game.MoveStrategies.BasicEnemy_Move_Strategy;
 import game.MoveStrategies.IEnemyMoveStrategy;
-
-import java.awt.Color;
-
-import javax.swing.Timer;
 
 import game.GameData;
 
 public abstract class Enemy {
+	
+	// Default values for an Enemy.
 	public static final int DEFAULT_WIDTH = IScreenData.tileWidth;
 	public static final int DEFAULT_HEIGHT = IScreenData.tileHeight;
 	public static final int DEFAULT_XCOOR = GameData.getGameData().getMap().getRoads()[0].getXCoor();
@@ -20,48 +18,58 @@ public abstract class Enemy {
 	public static final int DEFAULT_HEALTH = 100;
 	public static final int DEFAULT_XDIRECTION = 1;
 	public static final int DEFAULT_YDIRECTION = 0;
-	public static final int DEFAULT_MOVESPEED = 3;
+	public static final int DEFAULT_MOVESPEED = 1;
 
-	private int xCoor, yCoor, width, height;
+	// Used for displaying graphics.
+	private int xCoor, yCoor;
+	private int width, height;
+	
+	// Used for health.
 	private int health;
 	
+	// Used for movement of enemy.
 	private int xDirection, yDirection, moveSpeed;
 	
+	// Used to determine how to move enemy.
 	private IEnemyMoveStrategy moveStrategy;
+	// Used to determine how to collide with road.
 	private IEnemyCollisionMediator enemyCollisionMediator;
 	
-	public Enemy() {}
+	// Super class constructor with no values passed.
+	public Enemy() {
+		setXCoor(DEFAULT_XCOOR);
+		setYCoor(DEFAULT_YCOOR);
+		
+		setWidth(DEFAULT_WIDTH);
+		setHeight(DEFAULT_HEIGHT);
+		
+		setXDirection(DEFAULT_XDIRECTION);
+		setYDirection(DEFAULT_YDIRECTION);
+		setMoveSpeed(DEFAULT_MOVESPEED);
+		
+		setMoveStrategy(new BasicEnemy_Move_Strategy());
+		setEnemyCollisionMediator(new EnemyRoad_Collision_Mediator());
+		
+	}
 	
+	// Used to update current state of enemy.
 	public void update() {
 		checkCollision();
 		move();
 	}
 	
+	// Used to call the collision mediator's implementation.
 	public void checkCollision() {
 		enemyCollisionMediator.register(this);
 		enemyCollisionMediator.collision();
 	}
 	
+	// Used to call the move strategy's implementation.
 	public void move() {
 		moveStrategy.move(this);
 	}
 	
-	public void takeDamage(int damage) {
-		this.health -= damage;
-		
-	}
-	
-	public Enemy XCoor(int xCoor) { this.xCoor = xCoor; return this; }
-	public Enemy YCoor(int yCoor) { this.yCoor = yCoor; return this; }
-	public Enemy Width(int width) { this.width = width; return this; }
-	public Enemy Height(int height) { this.height = height; return this; }
-	public Enemy Health(int health) { this.health = health; return this; }
-	public Enemy XDirection(int xDirection) { this.xDirection = xDirection; return this; }
-	public Enemy YDirection(int yDirection) { this.yDirection = yDirection; return this; }
-	public Enemy MoveSpeed(int moveSpeed) { this.moveSpeed = moveSpeed; return this; }
-	public Enemy MoveStrategy(IEnemyMoveStrategy moveStrategy) { this.moveStrategy = moveStrategy; return this; }
-	public Enemy EnemyCollisionMediator(IEnemyCollisionMediator enemyCollisionMediator) { this.enemyCollisionMediator = enemyCollisionMediator; return this; }
-	
+	// Setter methods for superclass variables.
 	public void setXCoor(int xCoor) { this.xCoor = xCoor; }
 	public void setYCoor(int yCoor) { this.yCoor = yCoor; }
 	public void setWidth(int width) { this.width = width; }
@@ -72,7 +80,7 @@ public abstract class Enemy {
 	public void setMoveStrategy(IEnemyMoveStrategy moveStrategy) { this.moveStrategy = moveStrategy; }
 	public void setEnemyCollisionMediator(IEnemyCollisionMediator enemyCollisionMediator) { this.enemyCollisionMediator = enemyCollisionMediator; }
 
-	
+	// Setter methods for superclass variables.
 	public int getXCoor() { return this.xCoor; }
 	public int getYCoor() { return this.yCoor; }
 	public int getWidth() { return this.width; }
