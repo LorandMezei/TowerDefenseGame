@@ -17,18 +17,14 @@ public class BresenhamProjectile_Move_Strategy implements IProjectileMoveStrateg
 	public void move(Projectile projectile, Enemy enemy) {
 		
 		if (setTracking == false) {
-			// Get the x value to move to.
-			int moveToX = enemy.getXCoor() + ( (projectile.getXCoor() + projectile.getMaxDisplacement()) + 
-											   (enemy.getXCoor() - projectile.getXCoor()) 
-											 );
-			// Using linear extrapolation formula to get the y value to move to.
-			int moveToY = projectile.getYCoor() + (((moveToX - projectile.getXCoor())/(enemy.getXCoor() - projectile.getXCoor()))*((enemy.getYCoor() - projectile.getYCoor())));
 			
+			int moveToX = enemy.getXCoor();
+			int moveToY = enemy.getYCoor();
+
 			// Create the x and y path for the projectile to move along.
 			bresenham(projectile.getXCoor(), projectile.getYCoor(), moveToX, moveToY);
-			setTracking = true;
 			
-			System.out.println(moveToX + "," + moveToY);
+			setTracking = true;
 		}
 		
 		if (currentFrame < xPath.size()) {
@@ -41,29 +37,38 @@ public class BresenhamProjectile_Move_Strategy implements IProjectileMoveStrateg
 	}
 	
 	// function for line generation 
-    public void bresenham(int x1, int y1, int x2, int y2) 
+    public void bresenham(int x0, int y0, int x1, int y1) 
     { 
-    	
-        int m_new = 2 * (y2 - y1); 
-        int slope_error_new = m_new - (x2 - x1); 
-      
-        for (int x = x1, y = y1; x <= x2; x++) 
-        { 
-            //System.out.print("(" +x + "," + y + ")\n");
-            xPath.add(x);
-            yPath.add(y);
-            
-  
-            // Add slope to increment angle formed 
-            slope_error_new += m_new; 
-  
-            // Slope error reached limit, time to 
-            // increment y and update slope error. 
-            if (slope_error_new >= 0) 
-            { 
-                y++; 
-                slope_error_new -= 2 * (x2 - x1); 
-            } 
-        } 
+    	 
+        int dx = Math.abs(x1 - x0);
+        int dy = Math.abs(y1 - y0);
+ 
+        int sx = x0 < x1 ? 1 : -1; 
+        int sy = y0 < y1 ? 1 : -1; 
+ 
+        int err = dx-dy;
+        int e2;
+ 
+        while (true) 
+        {
+            xPath.add(x0);
+            yPath.add(y0);
+ 
+            if (x0 == x1 && y0 == y1) 
+                break;
+ 
+            e2 = 2 * err;
+            if (e2 > -dy) 
+            {
+                err = err - dy;
+                x0 = x0 + sx;
+            }
+ 
+            if (e2 < dx) 
+            {
+                err = err + dx;
+                y0 = y0 + sy;
+            }
+        }                                
     }
 }
