@@ -17,14 +17,15 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import game.GameData;
+import game.GameLogic;
 import game.IScreenData;
 import game.Enemies.Enemy;
 import game.Projectiles.Projectile;
 import game.Towers.Tower;
 
 
-public class GameFrame extends JFrame {
-	
+public class GameFrame extends JFrame 
+{	
 	private DrawGraphics_Panel drawGraphicsPanel;
 	private PlayerInfo_Panel playerInfoPanel;
 	private TowerMenu_Panel towerMenuPanel;
@@ -86,7 +87,8 @@ public class GameFrame extends JFrame {
 				enemy.update();
 			}
 			
-			for (Tower tower: GameData.getGameData().getTowers()) {
+			for (Tower tower: GameData.getGameData().getTowers()) 
+			{
 				tower.update();
 				for (Projectile projectile: tower.getProjectiles())
 				{

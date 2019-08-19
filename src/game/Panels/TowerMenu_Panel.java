@@ -3,51 +3,34 @@ package game.Panels;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.JButton;
-import javax.swing.JLabel;
-
-import game.IScreenData;
-
 import javax.swing.JPanel;
-
 import game.GameData;
-import game.Towers.TowerFactory;
+import game.Towers.Tower;
 
-public class TowerMenu_Panel extends JPanel {
-	
+public class TowerMenu_Panel extends JPanel 
+{	
 	private int width, height;
 	private int mouseX, mouseY;
 	
-	private JButton gunnerButton;
-	private JButton cannoneerButton;
-	
-	private JLabel mouseLabel;
+	private JButton towerButton;
 	
 	private GameFrame gameFrame;
 	
-	public TowerMenu_Panel(int width, int height, GameFrame gameFrame) {
+	public TowerMenu_Panel(int width, int height, GameFrame gameFrame) 
+	{
 		setWidth(width);
 		setHeight(height);
 		this.gameFrame = gameFrame;
 		
-		gunnerButton = new JButton("Add Gunner Tower");
-		cannoneerButton = new JButton("Add Cannoneer Tower");
-		mouseLabel = new JLabel(Integer.toString(mouseX) + Integer.toString(mouseY));
+		towerButton = new JButton("Add Tower");
 		
-		gunnerButton.addActionListener(
-				e -> GameData.getGameData().getTowers()
-					.add(TowerFactory.create(1, gameFrame.getDrawGraphicsPanel().getMouseX(), 
-											 gameFrame.getDrawGraphicsPanel().getMouseY())));
+		towerButton.addActionListener(
+				e -> GameData.getGameData()
+					.addTower(new Tower(gameFrame.getDrawGraphicsPanel().getMouseX(), 
+									    gameFrame.getDrawGraphicsPanel().getMouseY())));
 		
-		cannoneerButton.addActionListener(
-				e -> GameData.getGameData().getTowers()
-					 .add(TowerFactory.create(2, gameFrame.getDrawGraphicsPanel().getMouseX(), 
-							 				  gameFrame.getDrawGraphicsPanel().getMouseY())));
-		
-		add(gunnerButton);
-		add(cannoneerButton);
-		add(mouseLabel);
+		add(towerButton);
 		
 		addMouseListener(new MouseClickEvent());
 		addMouseMotionListener(new MouseMotionEvent());

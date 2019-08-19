@@ -2,25 +2,22 @@ package game.CollisionMediators;
 
 import game.GameData;
 import game.Enemies.Enemy;
-import game.Maps.HorizontalRoad;
 import game.Maps.Road;
-import game.Maps.VerticalRoad;
 
-public class EnemyRoad_Collision_Mediator implements IEnemyCollisionMediator {
+
+public class EnemyRoad_CollisionMediator implements IEnemyCollisionMediator {
 
 	private Enemy enemy;
 	private Road road;
 	private int currentRoadIndex = 0;
-	
+		
 	@Override
-	public void register(Enemy enemy) {
+	public void collision(Enemy enemy) {
+		// Register enemy
 		this.enemy = enemy;
 		
 		if (GameData.getGameData().getMap().getRoads().length != 0)
 			road = GameData.getGameData().getMap().getRoads()[currentRoadIndex];
-	}
-	
-	public void collision() {
 		
 		// Each enemy will only look at the next road it will go on,
 		// never the current road it is on.
@@ -39,7 +36,7 @@ public class EnemyRoad_Collision_Mediator implements IEnemyCollisionMediator {
 	public void checkRoadCollision(Road r) 
 	{
 		// Check horizontal collision with a vertical road.
-		if (r instanceof VerticalRoad) 
+		if (!r.getIsHorizontal()) 
 		{
 			// If enemy is moving in the positive x direction.
 			if (enemy.getXCoor() >= r.getXCoor() && enemy.getXDirection() == 1) 
@@ -87,7 +84,7 @@ public class EnemyRoad_Collision_Mediator implements IEnemyCollisionMediator {
 			}
 		}
 		// Check vertical collision with a horizontal road
-		else if (r instanceof HorizontalRoad) 
+		else if (r.getIsHorizontal()) 
 		{
 			// If enemy is moving in the positive y direction.
 			if (enemy.getYCoor() >= r.getYCoor() && enemy.getYDirection() == 1) 
@@ -134,5 +131,5 @@ public class EnemyRoad_Collision_Mediator implements IEnemyCollisionMediator {
 				}		
 			}
 		}
-	}	
+	}
 }

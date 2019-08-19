@@ -4,17 +4,14 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.Timer;
-
 import game.DetectStrategies.*;
 import game.Enemies.Enemy;
 import game.Projectiles.Projectile;
-import game.Projectiles.ProjectileFactory;
 import game.IScreenData;
 
-public abstract class Tower {	
-	
+public class Tower 
+{		
 	// Default values for a Tower.
 	public static final int DEFAULT_WIDTH = IScreenData.tileWidth;
 	public static final int DEFAULT_HEIGHT = IScreenData.tileHeight;
@@ -39,9 +36,13 @@ public abstract class Tower {
 		setXCoor(xCoor);
 		setYCoor(yCoor);
 		
+		setWidth(Tower.DEFAULT_WIDTH);
+		setHeight(Tower.DEFAULT_HEIGHT);
 		setColor(Color.BLUE);
 		
-		setAttackSpeed(500);
+		setDetectStrategy(new First_Detect_Strategy());
+		
+		setAttackSpeed(1000);
 		setAttackRadius((DEFAULT_WIDTH + DEFAULT_HEIGHT)*5);
 		setCanShoot(false);
 		setAttackEnemyTimer();
@@ -69,7 +70,7 @@ public abstract class Tower {
 	
 	// Used to create a projectile.
 	public void createProjectile(Enemy enemy) {
-		getProjectiles().add(ProjectileFactory.create(this, enemy));
+		projectiles.add(new Projectile(this, enemy));
 	}
 		
 	// Setter methods for superclass variables.

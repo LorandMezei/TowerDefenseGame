@@ -1,15 +1,13 @@
 package game.Enemies;
 
 import game.IScreenData;
-import game.CollisionMediators.EnemyRoad_Collision_Mediator;
+import game.CollisionMediators.EnemyRoad_CollisionMediator;
 import game.CollisionMediators.IEnemyCollisionMediator;
-import game.MoveStrategies.BasicEnemy_Move_Strategy;
-import game.MoveStrategies.IEnemyMoveStrategy;
-
 import game.GameData;
 
-public abstract class Enemy {
-	
+
+public class Enemy 
+{	
 	// Default values for an Enemy.
 	public static final int DEFAULT_WIDTH = IScreenData.tileWidth;
 	public static final int DEFAULT_HEIGHT = IScreenData.tileHeight;
@@ -18,7 +16,7 @@ public abstract class Enemy {
 	public static final int DEFAULT_HEALTH = 100;
 	public static final int DEFAULT_XDIRECTION = 1;
 	public static final int DEFAULT_YDIRECTION = 0;
-	public static final int DEFAULT_MOVESPEED = 1;
+	public static final int DEFAULT_MOVESPEED = 5;
 
 	// Used for displaying graphics.
 	private int xCoor, yCoor;
@@ -30,11 +28,9 @@ public abstract class Enemy {
 	// Used for movement of enemy.
 	private int xDirection, yDirection, moveSpeed;
 	
-	// Used to determine how to move enemy.
-	private IEnemyMoveStrategy moveStrategy;
 	// Used to determine how to collide with road.
 	private IEnemyCollisionMediator enemyCollisionMediator;
-	
+		
 	// Super class constructor with no values passed.
 	public Enemy() {
 		setXCoor(DEFAULT_XCOOR);
@@ -47,9 +43,7 @@ public abstract class Enemy {
 		setYDirection(DEFAULT_YDIRECTION);
 		setMoveSpeed(DEFAULT_MOVESPEED);
 		
-		setMoveStrategy(new BasicEnemy_Move_Strategy());
-		setEnemyCollisionMediator(new EnemyRoad_Collision_Mediator());
-		
+		setEnemyCollisionMediator(new EnemyRoad_CollisionMediator());
 	}
 	
 	// Used to update current state of enemy.
@@ -60,13 +54,13 @@ public abstract class Enemy {
 	
 	// Used to call the collision mediator's implementation.
 	public void checkCollision() {
-		enemyCollisionMediator.register(this);
-		enemyCollisionMediator.collision();
+		enemyCollisionMediator.collision(this);
 	}
 	
-	// Used to call the move strategy's implementation.
+	// Used to move enemy.
 	public void move() {
-		moveStrategy.move(this);
+		setXCoor(xCoor + (xDirection * moveSpeed));
+		setYCoor(yCoor + (yDirection * moveSpeed));
 	}
 	
 	// Setter methods for superclass variables.
@@ -77,7 +71,6 @@ public abstract class Enemy {
 	public void setXDirection(int xDirection) { this.xDirection = xDirection; }
 	public void setYDirection(int yDirection) { this.yDirection = yDirection; }
 	public void setMoveSpeed(int moveSpeed) { this.moveSpeed = moveSpeed; }
-	public void setMoveStrategy(IEnemyMoveStrategy moveStrategy) { this.moveStrategy = moveStrategy; }
 	public void setEnemyCollisionMediator(IEnemyCollisionMediator enemyCollisionMediator) { this.enemyCollisionMediator = enemyCollisionMediator; }
 
 	// Setter methods for superclass variables.
@@ -89,5 +82,5 @@ public abstract class Enemy {
 	public int getXDirection() { return this.xDirection; }
 	public int getYDirection() { return this.yDirection; }
 	public int getMoveSpeed() { return this.moveSpeed; }
-	public IEnemyMoveStrategy getMoveStrategy() { return this.moveStrategy; }
+	public IEnemyCollisionMediator getEnemyCollisionMediator() { return this.enemyCollisionMediator; }
 }

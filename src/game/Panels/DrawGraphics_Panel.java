@@ -18,8 +18,8 @@ import game.Maps.Road;
 import game.Projectiles.Projectile;
 import game.Towers.Tower;
 
-public class DrawGraphics_Panel extends JPanel {
-	
+public class DrawGraphics_Panel extends JPanel 
+{	
 	private int width, height;
 	private int mouseX, mouseY;
 	
@@ -55,7 +55,7 @@ public class DrawGraphics_Panel extends JPanel {
 		g.setColor(Color.RED);
 		
 		for (Enemy enemy: GameData.getGameData().getEnemies()) {
-			g.fillRect(enemy.getXCoor(), enemy.getYCoor(), 
+			g.fillOval(enemy.getXCoor(), enemy.getYCoor(), 
 					   enemy.getWidth(), enemy.getHeight());
 		}
 	}
@@ -78,7 +78,7 @@ public class DrawGraphics_Panel extends JPanel {
 		{
 			for (Projectile projectile: tower.getProjectiles()) 
 			{
-				g.fillRect(projectile.getXCoor(), projectile.getYCoor(), 
+				g.fillOval(projectile.getXCoor(), projectile.getYCoor(), 
 						   projectile.getWidth(), projectile.getHeight());
 			}
 		}

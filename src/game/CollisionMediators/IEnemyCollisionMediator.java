@@ -4,6 +4,5 @@ import game.Enemies.Enemy;
 import game.Projectiles.Projectile;
 
 public interface IEnemyCollisionMediator {
-	void register(Enemy object);
-	void collision();
+	void collision(Enemy enemy);
 }
