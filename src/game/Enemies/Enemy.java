@@ -3,6 +3,9 @@ package game.Enemies;
 import game.IScreenData;
 import game.CollisionMediators.EnemyRoad_CollisionMediator;
 import game.CollisionMediators.IEnemyCollisionMediator;
+
+import java.awt.Color;
+
 import game.GameData;
 
 
@@ -16,11 +19,12 @@ public class Enemy
 	public static final int DEFAULT_HEALTH = 100;
 	public static final int DEFAULT_XDIRECTION = 1;
 	public static final int DEFAULT_YDIRECTION = 0;
-	public static final int DEFAULT_MOVESPEED = 5;
+	public static final int DEFAULT_MOVESPEED = 3;
 
 	// Used for displaying graphics.
 	private int xCoor, yCoor;
 	private int width, height;
+	private Color color;
 	
 	// Used for health.
 	private int health;
@@ -38,6 +42,7 @@ public class Enemy
 		
 		setWidth(DEFAULT_WIDTH);
 		setHeight(DEFAULT_HEIGHT);
+		setColor(Color.RED);
 		
 		setXDirection(DEFAULT_XDIRECTION);
 		setYDirection(DEFAULT_YDIRECTION);
@@ -68,6 +73,7 @@ public class Enemy
 	public void setYCoor(int yCoor) { this.yCoor = yCoor; }
 	public void setWidth(int width) { this.width = width; }
 	public void setHeight(int height) { this.height = height; }
+	public void setColor(Color color) { this.color = color; }
 	public void setXDirection(int xDirection) { this.xDirection = xDirection; }
 	public void setYDirection(int yDirection) { this.yDirection = yDirection; }
 	public void setMoveSpeed(int moveSpeed) { this.moveSpeed = moveSpeed; }
@@ -78,6 +84,7 @@ public class Enemy
 	public int getYCoor() { return this.yCoor; }
 	public int getWidth() { return this.width; }
 	public int getHeight() { return this.height; }
+	public Color getColor() { return this.color; }
 	public int getHealth() { return this.health; }
 	public int getXDirection() { return this.xDirection; }
 	public int getYDirection() { return this.yDirection; }

@@ -47,7 +47,7 @@ public class Projectile
 		setHeight(DEFAULT_HEIGHT);
 		
 		setMaxDisplacement(tower.getAttackRadius());
-		setMoveSpeed(2);
+		setMoveSpeed(5);
 		setMoveStrategy(new BresenhamProjectile_MoveStrategy());
 		
 		setProjectileEnemyCollisionMediator(new ProjectileEnemy_CollisionMediator());

@@ -8,6 +8,6 @@ public interface IScreenData {
 	int screenWidth = (int) screenSize.getWidth();
     int screenHeight = (int) screenSize.getHeight();
     int tileWidth = screenWidth / 50;
-    int tileHeight = screenHeight / 50;
+    int tileHeight = screenHeight / 25;
 	
 }

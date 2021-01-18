@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import game.GameData;
 import game.IScreenData;
+import game.Round;
 import game.Enemies.Enemy;
 import game.Maps.Map;
 import game.Maps.Road;
@@ -50,11 +51,10 @@ public class DrawGraphics_Panel extends JPanel
 					   road.getWidth(), road.getHeight());
 		}
 	}
-	
+
 	public void drawEnemies(Graphics g) {
-		g.setColor(Color.RED);
-		
 		for (Enemy enemy: GameData.getGameData().getEnemies()) {
+			g.setColor(enemy.getColor());
 			g.fillOval(enemy.getXCoor(), enemy.getYCoor(), 
 					   enemy.getWidth(), enemy.getHeight());
 		}
